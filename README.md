@@ -44,6 +44,46 @@ You can also specify a number of options to the action.  See the Application Ins
     pre-release: [ true | false ]
 ```
 
+## Tag Diff in Pull Requests
+
+You can enable the `tagdiff` option to automatically compare source code tags between the PR base branch and the head branch. When enabled, the action will post (or update) a comment on the pull request summarizing which tags are new and which have been removed.
+
+This is useful for reviewing how code changes in a PR affect the detected features, frameworks, APIs, and security patterns.
+
+```yaml
+on:
+  pull_request:
+
+jobs:
+  tagdiff:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: microsoft/ApplicationInspector-Action@v1
+        with:
+          tagdiff: true
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+```
+
+The PR comment will include:
+- **New Tags**: Tags detected in the PR head branch that are not present in the base branch.
+- **Removed Tags**: Tags present in the base branch that are no longer detected in the PR head branch.
+- A summary of the total number of added and removed tags.
+
+If no tag differences are detected, the comment will indicate that the PR does not affect the detected feature tags.
+
+The comment is updated in place on subsequent pushes to the same PR, so you will always see the latest tag diff without duplicate comments.
+
+### Tag Diff Options
+
+| Option | Description | Default |
+|---|---|---|
+| `tagdiff` | Enable tag diff comparison in pull requests | `false` |
+| `github-token` | GitHub token for posting PR comments (required when tagdiff is enabled) | `''` |
+| `location-to-scan` | Path relative to repository root to scan (applies to both analyze and tagdiff) | `GITHUB_WORKSPACE` |
+| `file-path-exclusions` | Comma separated glob patterns to exclude (applies to both analyze and tagdiff) | `,` |
+| `pre-release` | Use pre-release version of Application Inspector | `false` |
+
 ## Main Project
 
 The engine powering this GitHub Action is also available [here](https://github.com/Microsoft/ApplicationInspector) as a Cli.

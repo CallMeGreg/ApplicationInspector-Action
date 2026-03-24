@@ -25,6 +25,14 @@ inputs:
     description: 'If there is pre-release version that is a later version number use that. Otherwise will use latest stable.'
     required: false
     default: false
+  tagdiff:
+    description: 'Enable tag diff comparison in pull requests. Compares tags between the PR base and head branches and posts a PR comment with the differences.'
+    required: false
+    default: 'false'
+  github-token:
+    description: 'GitHub token for posting PR comments. Required when tagdiff is enabled. Example: ${{ secrets.GITHUB_TOKEN }}'
+    required: false
+    default: ''
 
 branding:
   icon: 'check-square'  
@@ -39,3 +47,6 @@ runs:
     - ${{ inputs.file-path-exclusions }}
     - ${{ inputs.arguments }}
     - ${{ inputs.pre-release }}
+    - ${{ inputs.tagdiff }}
+  env:
+    GITHUB_TOKEN: ${{ inputs.github-token }}
