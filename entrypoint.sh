@@ -98,16 +98,16 @@ if [ "$7" = "true" ]; then
             (.tag // .Tag)
         ' "$TAGDIFF_OUTPUT" 2>/dev/null || true)
 
-        # Count tags
+        # Count tags (filter empty lines for accurate count)
         if [ -z "$ADDED_TAGS" ]; then
             ADDED_COUNT=0
         else
-            ADDED_COUNT=$(echo "$ADDED_TAGS" | wc -l)
+            ADDED_COUNT=$(echo "$ADDED_TAGS" | grep -c '.')
         fi
         if [ -z "$REMOVED_TAGS" ]; then
             REMOVED_COUNT=0
         else
-            REMOVED_COUNT=$(echo "$REMOVED_TAGS" | wc -l)
+            REMOVED_COUNT=$(echo "$REMOVED_TAGS" | grep -c '.')
         fi
 
         # Build markdown comment
